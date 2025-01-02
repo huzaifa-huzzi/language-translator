@@ -19,11 +19,11 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
     final width = MediaQuery.of(context).size.width;
     final height= MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0xff10223d),
+      backgroundColor: const Color(0xff10223d),
       appBar: AppBar(
-        title: Text('Language Translator'),
+        title: const Text('Language Translator'),
         centerTitle: true,
-        backgroundColor: Color(0xff10223d),
+        backgroundColor: const Color(0xff10223d),
         elevation: 0,
       ),
       body: Center(
@@ -37,27 +37,27 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
                     focusColor: Colors.white,
                       iconDisabledColor: Colors.white,
                       iconEnabledColor: Colors.white,
-                      hint: Text(controller.originLanguage,style: TextStyle(color: Colors.white),),
+                      hint: Text(controller.originLanguage,style: const TextStyle(color: Colors.white),),
                       items: controller.languages.map((String dropDownStringItem){
-                        return DropdownMenuItem(child: Text(dropDownStringItem),value: dropDownStringItem,);
+                        return DropdownMenuItem(value: dropDownStringItem,child: Text(dropDownStringItem),);
                       }).toList(),
-                      icon: Icon(Icons.keyboard_arrow_down),
+                      icon: const Icon(Icons.keyboard_arrow_down),
                       dropdownColor: Colors.white,
                     onChanged: (String? value) {
                       controller.originLanguage = value!;
                     },
                       ),
                   SizedBox(width: width * 0.4,),
-                  Icon(Icons.arrow_right_alt_rounded,color: Colors.white,),
+                  const Icon(Icons.arrow_right_alt_rounded,color: Colors.white,),
                   DropdownButton(
                     focusColor: Colors.white,
                     iconDisabledColor: Colors.white,
                     iconEnabledColor: Colors.white,
-                    hint: Text(controller.destinationLanguage,style: TextStyle(color: Colors.white),),
+                    hint: Text(controller.destinationLanguage,style: const TextStyle(color: Colors.white),),
                     items: controller.languages.map((String dropDownStringItem){
-                      return DropdownMenuItem(child: Text(dropDownStringItem),value: dropDownStringItem,);
+                      return DropdownMenuItem(value: dropDownStringItem,child: Text(dropDownStringItem),);
                     }).toList(),
-                    icon: Icon(Icons.keyboard_arrow_down),
+                    icon: const Icon(Icons.keyboard_arrow_down),
                     dropdownColor: Colors.white,
                     onChanged: (String? value) {
                       controller.destinationLanguage = value!;
@@ -66,7 +66,29 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
                 ],
               ),
               SizedBox(height: height * .5,),
-
+              Padding(
+               padding: const EdgeInsets.all(8) ,
+                child: TextFormField(
+                    cursorColor: Colors.white,
+                    autofocus: false,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Please enter yout text....',
+                    labelStyle: TextStyle(fontSize: 15,color: Colors.white),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 1
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white,width: 1)
+                    ),
+                    errorStyle: TextStyle(color: Colors.red,fontSize: 15)
+                  ),
+                  controller: controller.languageController,
+                ),
+              )
             ],
           ),
         ),
