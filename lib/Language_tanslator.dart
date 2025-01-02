@@ -31,6 +31,7 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
           child: Column(
             children: [
               SizedBox(height: height * .5,),
+              /// DropdownButton
               Row(
                 children: [
                   DropdownButton(
@@ -66,6 +67,7 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
                 ],
               ),
               SizedBox(height: height * .5,),
+              /// Textformfield or SearchBar
               Padding(
                padding: const EdgeInsets.all(8) ,
                 child: TextFormField(
@@ -87,8 +89,15 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
                     errorStyle: TextStyle(color: Colors.red,fontSize: 15)
                   ),
                   controller: controller.languageController,
+                  validator: (value){
+                      if(value == null){
+                        return 'Please enter text to translate';
+                      }
+                      return null;
+                  },
                 ),
-              )
+              ),
+               /// Elevated button to translate it
             ],
           ),
         ),
