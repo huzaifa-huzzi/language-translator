@@ -99,9 +99,11 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
               ),
                /// Elevated button to translate it
               Padding(
-                  padding:
-
-              )
+                  padding:const  EdgeInsets.all(8),
+                child: ElevatedButton(
+                    onPressed: (){},
+                    child: Text('Translate')),
+              ),
             ],
           ),
         ),
