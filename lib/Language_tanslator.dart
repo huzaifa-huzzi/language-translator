@@ -2,22 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:language_translator/View_model/LanguageController.dart';
 
-
-class LanguageTranslator extends StatefulWidget {
-  const LanguageTranslator({super.key});
-
-  @override
-  State<LanguageTranslator> createState() => _LanguageTranslatorState();
-}
-
-class _LanguageTranslatorState extends State<LanguageTranslator> {
-
+class LanguageTranslator extends StatelessWidget {
   final LanguageController controller = Get.put(LanguageController());
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height= MediaQuery.of(context).size.height;
+    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: const Color(0xff10223d),
       appBar: AppBar(
@@ -30,80 +22,90 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: height * .5,),
-              /// DropdownButton
+              SizedBox(height: height * 0.1),
+              /// Dropdown for selecting languages
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DropdownButton(
-                    focusColor: Colors.white,
-                      iconDisabledColor: Colors.white,
-                      iconEnabledColor: Colors.white,
-                      hint: Text(controller.originLanguage,style: const TextStyle(color: Colors.white),),
-                      items: controller.languages.map((String dropDownStringItem){
-                        return DropdownMenuItem(value: dropDownStringItem,child: Text(dropDownStringItem),);
-                      }).toList(),
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      dropdownColor: Colors.white,
+                    value: controller.originLanguage.value,
+                    items: controller.languages
+                        .map((lang) => DropdownMenuItem(
+                      value: lang,
+                      child: Text(lang),
+                    ))
+                        .toList(),
                     onChanged: (String? value) {
-                      controller.originLanguage = value!;
+                      controller.originLanguage.value = value!;
                     },
-                      ),
-                  SizedBox(width: width * 0.4,),
-                  const Icon(Icons.arrow_right_alt_rounded,color: Colors.white,),
-                  DropdownButton(
-                    focusColor: Colors.white,
-                    iconDisabledColor: Colors.white,
-                    iconEnabledColor: Colors.white,
-                    hint: Text(controller.destinationLanguage,style: const TextStyle(color: Colors.white),),
-                    items: controller.languages.map((String dropDownStringItem){
-                      return DropdownMenuItem(value: dropDownStringItem,child: Text(dropDownStringItem),);
-                    }).toList(),
-                    icon: const Icon(Icons.keyboard_arrow_down),
                     dropdownColor: Colors.white,
+                    hint: Obx(() => Text(
+                      controller.originLanguage.value,
+                      style: const TextStyle(color: Colors.white),
+                    )),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    iconEnabledColor: Colors.white,
+                  ),
+                  SizedBox(width: width * 0.1),
+                  const Icon(Icons.arrow_right_alt_rounded, color: Colors.white),
+                  DropdownButton(
+                    value: controller.destinationLanguage.value,
+                    items: controller.languages
+                        .map((lang) => DropdownMenuItem(
+                      value: lang,
+                      child: Text(lang),
+                    ))
+                        .toList(),
                     onChanged: (String? value) {
-                      controller.destinationLanguage = value!;
+                      controller.destinationLanguage.value = value!;
                     },
+                    dropdownColor: Colors.white,
+                    hint: Obx(() => Text(
+                      controller.destinationLanguage.value,
+                      style: const TextStyle(color: Colors.white),
+                    )),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    iconEnabledColor: Colors.white,
                   ),
                 ],
               ),
-              SizedBox(height: height * .5,),
-              /// Textformfield or SearchBar
+              SizedBox(height: height * 0.1),
+              /// TextFormField for input text
               Padding(
-               padding: const EdgeInsets.all(8) ,
+                padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
-                    cursorColor: Colors.white,
-                    autofocus: false,
+                  cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'Please enter yout text....',
-                    labelStyle: TextStyle(fontSize: 15,color: Colors.white),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                        width: 1
-                      ),
-                    ),
+                    labelText: 'Enter text to translate...',
+                    labelStyle: TextStyle(color: Colors.white),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white,width: 1)
+                      borderSide: BorderSide(color: Colors.white),
                     ),
-                    errorStyle: TextStyle(color: Colors.red,fontSize: 15)
+                    border: OutlineInputBorder(),
                   ),
                   controller: controller.languageController,
-                  validator: (value){
-                      if(value == null){
-                        return 'Please enter text to translate';
-                      }
-                      return null;
-                  },
                 ),
               ),
-               /// Elevated button to translate it
+              /// Translate Button
               Padding(
-                  padding:const  EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(),
-                    onPressed: (){},
-                    child: Text('Translate')),
+                  onPressed: () => controller.translateLanguages(),
+                  child: const Text('Translate'),
+                ),
+              ),
+              /// Output Translation Result
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Obx(() => Text(
+                  controller.output.value,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                )),
               ),
             ],
           ),
