@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:language_translator/View_model/LanguageController.dart';
 
-class LanguageTranslator extends StatelessWidget {
+class LanguageTranslator extends StatefulWidget {
+  const LanguageTranslator({super.key});
+
+  @override
+  State<LanguageTranslator> createState() => _LanguageTranslatorState();
+}
+
+class _LanguageTranslatorState extends State<LanguageTranslator> {
   final LanguageController controller = Get.put(LanguageController());
 
   @override
@@ -13,7 +20,7 @@ class LanguageTranslator extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xff10223d),
       appBar: AppBar(
-        title: const Text('Language Translator'),
+        title: const Text('Language Translator',style: TextStyle(color: Colors.white),),
         centerTitle: true,
         backgroundColor: const Color(0xff10223d),
         elevation: 0,
@@ -22,13 +29,14 @@ class LanguageTranslator extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: height * 0.1),
-              /// Dropdown for selecting languages
+              /// DropdownButton
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  DropdownButton(
-                    value: controller.originLanguage.value,
+                  Obx(() => DropdownButton<String>(
+                    value: controller.originLanguage.isNotEmpty
+                        ? controller.originLanguage.value
+                        : null,
                     items: controller.languages
                         .map((lang) => DropdownMenuItem(
                       value: lang,
@@ -39,17 +47,22 @@ class LanguageTranslator extends StatelessWidget {
                       controller.originLanguage.value = value!;
                     },
                     dropdownColor: Colors.white,
-                    hint: Obx(() => Text(
-                      controller.originLanguage.value,
-                      style: const TextStyle(color: Colors.white),
-                    )),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    iconEnabledColor: Colors.white,
-                  ),
+                    hint: const Text(
+                      'From',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    icon: const Icon(Icons.keyboard_arrow_down,
+                        color: Colors.white),
+                  )),
                   SizedBox(width: width * 0.1),
-                  const Icon(Icons.arrow_right_alt_rounded, color: Colors.white),
-                  DropdownButton(
-                    value: controller.destinationLanguage.value,
+                  const Icon(
+                    Icons.arrow_right_alt_rounded,
+                    color: Colors.white,
+                  ),
+                  Obx(() => DropdownButton<String>(
+                    value: controller.destinationLanguage.isNotEmpty
+                        ? controller.destinationLanguage.value
+                        : null,
                     items: controller.languages
                         .map((lang) => DropdownMenuItem(
                       value: lang,
@@ -60,53 +73,69 @@ class LanguageTranslator extends StatelessWidget {
                       controller.destinationLanguage.value = value!;
                     },
                     dropdownColor: Colors.white,
-                    hint: Obx(() => Text(
-                      controller.destinationLanguage.value,
-                      style: const TextStyle(color: Colors.white),
-                    )),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    iconEnabledColor: Colors.white,
-                  ),
+                    hint: const Text(
+                      'To',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    icon: const Icon(Icons.keyboard_arrow_down,
+                        color: Colors.white),
+                  )),
                 ],
               ),
               SizedBox(height: height * 0.1),
-              /// TextFormField for input text
+
+              /// TextFormField
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8),
                 child: TextFormField(
                   cursorColor: Colors.white,
+                  autofocus: false,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'Enter text to translate...',
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                    labelText: 'Enter your text...',
+                    labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 1),
                     ),
-                    border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 1),
+                    ),
+                    errorStyle: TextStyle(color: Colors.red, fontSize: 15),
                   ),
                   controller: controller.languageController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter text to translate';
+                    }
+                    return null;
+                  },
                 ),
               ),
-              /// Translate Button
+
+              /// ElevatedButton
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: ElevatedButton(
-                  onPressed: () => controller.translateLanguages(),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent),
+                  onPressed: () {
+                    controller.translatedLanguages();
+                  },
                   child: const Text('Translate'),
                 ),
               ),
-              /// Output Translation Result
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Obx(() => Text(
+
+              /// Output Text
+              Obx(() => Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
                   controller.output.value,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
-                  textAlign: TextAlign.center,
-                )),
-              ),
+                ),
+              )),
             ],
           ),
         ),
