@@ -98,6 +98,10 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
                 ),
               ),
                /// Elevated button to translate it
+              Padding(
+                  padding:
+
+              )
             ],
           ),
         ),
