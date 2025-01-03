@@ -23,4 +23,15 @@ class LanguageController extends  GetxController {
       }
   }
 
+  String getLanguageCode(String languages){
+    if(languages == 'Urdu'){
+      return "ur";
+    } else if(languages == 'English'){
+      return "en";
+    } else if(languages == 'Hindi'){
+      return "hi";
+    }
+    return '--';
+  }
+
 }

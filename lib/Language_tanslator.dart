@@ -101,6 +101,7 @@ class _LanguageTranslatorState extends State<LanguageTranslator> {
               Padding(
                   padding:const  EdgeInsets.all(8),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(),
                     onPressed: (){},
                     child: Text('Translate')),
               ),
